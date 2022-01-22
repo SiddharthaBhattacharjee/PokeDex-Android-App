@@ -46,6 +46,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             "Normal","Normal","Water","Electric","Fire","Normal","Rock/Water","Rock/Water","Rock/Water","Rock/Water",
             "Rock/Flying","Normal","Ice/Flying","Electric/Flying","Fire/Flying","Dragon","Dragon","Dragon/Flying",
             "Psychic","Psychic"};
+    private onNoteListner mOnNoteListner;
     private String[] localDataSet;
     private Context parentcontext;
 
@@ -53,13 +54,14 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView textView;
         private  TextView nameview;
         private TextView typeview;
         private ImageView iconview;
+        onNoteListner onNoteListner;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view, onNoteListner onNoteListner) {
             super(view);
             // Define click listener for the ViewHolder's View
 
@@ -67,6 +69,8 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             nameview = (TextView) view.findViewById(R.id.pkname);
             typeview = (TextView) view.findViewById(R.id.type);
             iconview = (ImageView) view.findViewById(R.id.pkicon);
+            this.onNoteListner = onNoteListner;
+            itemView.setOnClickListener(this);
         }
 
         public TextView getTextView() {
@@ -82,12 +86,18 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         public ImageView getIconview(){
             return iconview;
         }
+
+        @Override
+        public void onClick(View view) {
+            onNoteListner.onNoteClick(getAdapterPosition());
+        }
     }
 
     //step1 : Initialize the dataset of the Adapter.
 
-    public customAdapter(String[] dataSet) {
+    public customAdapter(String[] dataSet, onNoteListner onNoteListner) {
         localDataSet = dataSet;
+        this.mOnNoteListner = onNoteListner;
     }
 
     // step 2 : Create new views (invoked by the layout manager)
@@ -96,7 +106,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.text_row_item, viewGroup, false);
         parentcontext = viewGroup.getContext();
-        return new ViewHolder(view);
+        return new ViewHolder(view,mOnNoteListner);
     }
 
     // step 3 : Replace the contents of a view (invoked by the layout manager)
@@ -119,6 +129,10 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         int imageResource = parentcontext.getResources().getIdentifier(uri, null, parentcontext.getPackageName());
         Drawable myDrawable = parentcontext.getResources().getDrawable(imageResource);
         viewHolder.getIconview().setImageDrawable(myDrawable);
+    }
+
+    public interface onNoteListner{
+        void onNoteClick(int position);
     }
 
     //step 4 : Return the size of your dataset (invoked by the layout manager)

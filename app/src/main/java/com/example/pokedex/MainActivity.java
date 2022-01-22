@@ -5,11 +5,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements customAdapter.onNoteListner {
     public Context context = this;
+    public static final String webkey = "com.example.pokedex.151.pokemon.openbulbapedia";
     RecyclerView recyclerView;
     String[] dexNum = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18",
             "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37",
@@ -25,9 +28,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.recyclerView);
-        customAdapter c = new customAdapter(dexNum);
+        customAdapter c = new customAdapter(dexNum,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(c);
 
+    }
+    @Override
+    public void onNoteClick(int position){
+        Toast.makeText(this, "Loading Dex Entry No."+(position+1)+"...", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this,MainActivity2.class);
+        i.putExtra(webkey,position+1);
+        startActivity(i);
     }
 }
