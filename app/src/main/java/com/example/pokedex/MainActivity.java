@@ -1,6 +1,7 @@
 package com.example.pokedex;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements customAdapter.onN
         customAdapter c = new customAdapter(dexNum,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(c);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,1));
 
     }
     @Override
